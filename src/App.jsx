@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
 
-const API_BASE_URL = "https://khaberni-backend-production.up.railway.app";
+const API_BASE_URL = "https://khaberni-backend.onrender.com";
 
 const DEFAULT_SECTIONS = [
   { id: "Water", title: "مياه اليوم" },
