@@ -744,6 +744,8 @@ const deleteSection = async (sectionId) => {
                 <p>تشغيل تحديث العملات أو إرسال إشعارات المياه يدويًا.</p>
               </div>
               </div>
+                      </>
+        )}
               {jobResult && (
   <div className="form-card" style={{ marginTop: "30px", textAlign: "right" }}>
     <h2>نتيجة آخر عملية</h2>
@@ -786,8 +788,7 @@ const deleteSection = async (sectionId) => {
     </pre>
   </div>
 )}
-          </>
-        )}
+
 
         {activePage === "content" && (
           <>
