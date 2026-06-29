@@ -51,7 +51,8 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [stats, setStats] = useState(null);
-
+const [jobResult, setJobResult] = useState(null);
+  
   const [selectedSection, setSelectedSection] = useState("Water");
   const [items, setItems] = useState([]);
 const [schedulerConfig, setSchedulerConfig] = useState({
@@ -657,19 +658,23 @@ const deleteSection = async (sectionId) => {
     setLoading(false);
   }
 };
-  const runJob = async (jobName) => {
-    setLoading(true);
-    setMessage("");
+ const runJob = async (jobName) => {
+  setLoading(true);
+  setMessage("");
+  setJobResult(null);
 
-    try {
-      await axios.get(`${API_BASE_URL}/api/jobs/${jobName}`, authHeaders);
-      setMessage("تم تنفيذ العملية بنجاح");
-    } catch (error) {
-      setMessage("فشل تنفيذ العملية");
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    const response = await axios.get(`${API_BASE_URL}/api/jobs/${jobName}`, authHeaders);
+
+    setJobResult(response.data);
+    setMessage("تم تنفيذ العملية بنجاح");
+  } catch (error) {
+    setJobResult(error.response?.data || null);
+    setMessage(error.response?.data?.error || "فشل تنفيذ العملية");
+  } finally {
+    setLoading(false);
+  }
+};
 
   if (!token) {
     return (
@@ -738,6 +743,48 @@ const deleteSection = async (sectionId) => {
                 <h3>التحديثات</h3>
                 <p>تشغيل تحديث العملات أو إرسال إشعارات المياه يدويًا.</p>
               </div>
+              {jobResult && (
+  <div className="form-card" style={{ marginTop: "30px", textAlign: "right" }}>
+    <h2>نتيجة آخر عملية</h2>
+
+    {jobResult.source && (
+      <p>
+        <strong>المصدر:</strong> {jobResult.source}
+      </p>
+    )}
+
+    {jobResult.changed !== undefined && (
+      <p>
+        <strong>عدد التغييرات:</strong> {jobResult.changed}
+      </p>
+    )}
+
+    {jobResult.checked !== undefined && (
+      <p>
+        <strong>عدد العناصر المفحوصة:</strong> {jobResult.checked}
+      </p>
+    )}
+
+    {jobResult.error && (
+      <p style={{ color: "red" }}>
+        <strong>الخطأ:</strong> {jobResult.error}
+      </p>
+    )}
+
+    <pre
+      style={{
+        background: "#f1f5f9",
+        padding: "15px",
+        borderRadius: "12px",
+        overflowX: "auto",
+        direction: "ltr",
+        textAlign: "left",
+      }}
+    >
+      {JSON.stringify(jobResult, null, 2)}
+    </pre>
+  </div>
+)}
             </div>
           </>
         )}
