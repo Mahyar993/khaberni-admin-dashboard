@@ -746,50 +746,7 @@ const deleteSection = async (sectionId) => {
               </div>
                       </>
         )}
-              {jobResult && (
-  <div className="form-card" style={{ marginTop: "30px", textAlign: "right" }}>
-    <h2>نتيجة آخر عملية</h2>
-
-    {jobResult.source && (
-      <p>
-        <strong>المصدر:</strong> {jobResult.source}
-      </p>
-    )}
-
-    {jobResult.changed !== undefined && (
-      <p>
-        <strong>عدد التغييرات:</strong> {jobResult.changed}
-      </p>
-    )}
-
-    {jobResult.checked !== undefined && (
-      <p>
-        <strong>عدد العناصر المفحوصة:</strong> {jobResult.checked}
-      </p>
-    )}
-
-    {jobResult.error && (
-      <p style={{ color: "red" }}>
-        <strong>الخطأ:</strong> {jobResult.error}
-      </p>
-    )}
-
-    <pre
-      style={{
-        background: "#f1f5f9",
-        padding: "15px",
-        borderRadius: "12px",
-        overflowX: "auto",
-        direction: "ltr",
-        textAlign: "left",
-      }}
-    >
-      {JSON.stringify(jobResult, null, 2)}
-    </pre>
-  </div>
-)}
-
-
+        
         {activePage === "content" && (
           <>
             <h1>إدارة المحتوى</h1>
@@ -1234,39 +1191,61 @@ const deleteSection = async (sectionId) => {
           </>
         )}
 
-        {activePage === "jobs" && (
-          <>
-            <h1>التحديثات اليدوية</h1>
-            <p>استخدم هذه الأزرار عند الحاجة فقط.</p>
+     {activePage === "jobs" && (
+  <>
+    <h1>التحديثات اليدوية</h1>
+    <p>استخدم هذه الأزرار عند الحاجة فقط.</p>
 
-            <div className="cards">
-              <div className="stat-card">
-                <h3>تحديث العملات</h3>
-                <p>جلب أحدث أسعار العملات من المصدر.</p>
-                <button onClick={() => runJob("update-currencies")}>
-                  تحديث العملات الآن
-                </button>
-              </div>
+    <div className="cards">
+      <div className="stat-card">
+        <h3>تحديث العملات</h3>
+        <p>جلب أحدث أسعار العملات من المصدر، وإذا فشل المصدر يتم استخدام Telegram.</p>
+        <button disabled={loading} onClick={() => runJob("update-currencies")}>
+          {loading ? "جاري التحديث..." : "تحديث العملات الآن"}
+        </button>
+      </div>
 
-              <div className="stat-card">
-                <h3>تحديث Google Sheet</h3>
-                <p>مؤقتًا حتى يتم الاستغناء عنه بالكامل.</p>
-                <button onClick={() => runJob("update-daily-sheet")}>
-                  تحديث البيانات الآن
-                </button>
-              </div>
+      <div className="stat-card">
+        <h3>تحديث Google Sheet</h3>
+        <p>مؤقتًا حتى يتم الاستغناء عنه بالكامل.</p>
+        <button disabled={loading} onClick={() => runJob("update-daily-sheet")}>
+          تحديث البيانات الآن
+        </button>
+      </div>
 
-              <div className="stat-card">
-                <h3>إشعارات المياه</h3>
-                <p>إرسال إشعارات المياه الحالية لجميع المستخدمين.</p>
-                <button onClick={() => runJob("send-water-notifications")}>
-                  إرسال إشعار المياه
-                </button>
-              </div>
-            </div>
-          </>
-        )}
-    {activePage === "stats" && (
+      <div className="stat-card">
+        <h3>إشعارات المياه</h3>
+        <p>إرسال إشعارات المياه الحالية لجميع المستخدمين.</p>
+        <button disabled={loading} onClick={() => runJob("send-water-notifications")}>
+          إرسال إشعار المياه
+        </button>
+      </div>
+    </div>
+
+    {jobResult && (
+      <div className="form-card" style={{ marginTop: "30px", textAlign: "right" }}>
+        <h2>نتيجة آخر عملية</h2>
+
+        {jobResult.source && <p><strong>المصدر:</strong> {jobResult.source}</p>}
+        {jobResult.changed !== undefined && <p><strong>عدد التغييرات:</strong> {jobResult.changed}</p>}
+        {jobResult.checked !== undefined && <p><strong>عدد العناصر المفحوصة:</strong> {jobResult.checked}</p>}
+        {jobResult.error && <p style={{ color: "red" }}><strong>الخطأ:</strong> {jobResult.error}</p>}
+
+        <pre style={{
+          background: "#f1f5f9",
+          padding: "15px",
+          borderRadius: "12px",
+          overflowX: "auto",
+          direction: "ltr",
+          textAlign: "left",
+        }}>
+          {JSON.stringify(jobResult, null, 2)}
+        </pre>
+      </div>
+    )}
+  </>
+)}
+        {activePage === "stats" && (
       <>
         <h1>إحصائيات التطبيق</h1>
         <p>عرض عدد المستخدمين ومرات فتح التطبيق والإعلانات.</p>
